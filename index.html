@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GameStar39 | PS4 Jailbreak 9.00</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-image: url('icon0.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: white;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    @font-face {
+      font-family: 'logging';
+      src: url('fonts/LiberationMono-Regular.ttf');
+    }
+
+    .card {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      width: 90%;
+      max-width: 700px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    #console {
+      font-family: 'logging', monospace;
+      font-size: 18px;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    if (window.applicationCache.status === 0) {
+      window.location.replace("cache.html");
+    }
+  </script>
+
+  <div class="card">
+    <h1>GameStar39 | PS4 Jailbreak 9.00</h1>
+    <pre id="console"></pre>
+  </div>
+
+  <script src="payload.js"></script>
+  <script type="module" src="./alert.mjs"></script>
+
+<script>
+  let successGiven = false;
+
+  const failureIndicators = [
+    "0x80020003",
+    "unhandled rejection",
+    "dieerror",
+    "failed to make aliased pktopts"
+  ];
+
+  const checkInterval = setInterval(() => {
+    const console = document.getElementById("console");
+    if (!console) return;
+    const text = console.innerText.toLowerCase();
+
+    if (text.includes("kernel exploit succeeded!")) {
+      if (!successGiven) {
+        incrementSuccess();
+        successGiven = true;
+        clearInterval(checkInterval);
+      }
+    }
+
+    if (failureIndicators.some(err => text.includes(err))) {
+      if (!successGiven) {
+        incrementFail();
+        successGiven = true;
+        clearInterval(checkInterval);
+      }
+    }
+  }, 1000);
+</script>
+
+
+<div id="statsBox" style="position: fixed; bottom: 10px; left: 10px; background: rgba(0,0,0,0.7); color: white; padding: 10px 15px; border-radius: 10px; font-family: monospace; font-size: 14px; z-index: 9999;">
+  ✅ Successes: <span id="successCount">0</span><br>
+  ❌ Fails: <span id="failCount">0</span><br>
+  🔗 <a href="https://www.youtube.com/@GameStar39" target="_blank" style="color: #4FC3F7;">قناتي</a>
+</div>
+<script>
+  function incrementSuccess() {
+    let el = document.getElementById("successCount");
+    el.innerText = parseInt(el.innerText) + 1;
+    localStorage.setItem("successes", el.innerText);
+  }
+  function incrementFail() {
+    let el = document.getElementById("failCount");
+    el.innerText = parseInt(el.innerText) + 1;
+    localStorage.setItem("fails", el.innerText);
+  }
+  window.onload = () => {
+    document.getElementById("successCount").innerText = localStorage.getItem("successes") || "0";
+    document.getElementById("failCount").innerText = localStorage.getItem("fails") || "0";
+  }
+</script>
+
+</body>
+</html>
