@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>تحميل البايلود - PS4</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('icon0.png') no-repeat center center fixed;
+      background-size: cover;
+      font-family: sans-serif;
+      color: white;
+      text-align: center;
+    }
+    #console {
+      background-color: rgba(0,0,0,0.7);
+      color: white;
+      font-family: monospace;
+      padding: 20px;
+      margin: 40px auto;
+      width: 90%;
+      max-width: 800px;
+      border-radius: 10px;
+      text-align: left;
+      direction: ltr;
+      white-space: pre-wrap;
+    }
+    #statsBox {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 12px 24px;
+      border-radius: 15px;
+      font-size: 20px;
+    }
+    #statsBox a {
+      color: #00aaff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>جاري تحميل GoldHen...</h1>
+  <div id="console">انتظر قليلاً...</div>
+
+  <div id="statsBox">
+    <span id="successCount">نجاحات التعديلة: 0</span> |
+    <span id="failCount">فشل التعديلة: 0</span>
+    <div>الموقع مقدم من طرف <a href="https://www.youtube.com/@GameStar39" target="_blank">GameStar39</a></div>
+  </div>
+
+  <script>
+    const successKey = "success";
+    const failKey = "fail";
+    const successText = "kernel exploit succeeded!";
+    const failTexts = ["delete errors", "target states"];
+    let successGiven = false;
+
+    function incrementSuccess() {
+      let count = parseInt(localStorage.getItem(successKey) || "0") + 1;
+      localStorage.setItem(successKey, count);
+      document.getElementById("successCount").textContent = "نجاحات التعديلة: " + count;
+    }
+
+    function incrementFail() {
+      let count = parseInt(localStorage.getItem(failKey) || "0") + 1;
+      localStorage.setItem(failKey, count);
+      document.getElementById("failCount").textContent = "فشل التعديلة: " + count;
+    }
+
+    document.getElementById("successCount").textContent = "نجاحات التعديلة: " + (localStorage.getItem(successKey) || 0);
+    document.getElementById("failCount").textContent = "فشل التعديلة: " + (localStorage.getItem(failKey) || 0);
+
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        if (successGiven) return;
+        const text = mutation.target.textContent.toLowerCase();
+        if (text.includes(successText)) {
+          incrementSuccess();
+          successGiven = true;
+        } else if (failTexts.some(f => text.includes(f))) {
+          incrementFail();
+          successGiven = true;
+        }
+      });
+    });
+
+    observer.observe(document.getElementById("console"), {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+  </script>
+</body>
+</html>
