@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GameStar39 | PS4 Jailbreak 9.00</title>
+  <style>
+    body {
+      margin: 0;
+      background-image: url('icon0.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      font-family: Arial, sans-serif;
+      color: white;
+      overflow: hidden;
+    }
+
+    .status-message {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 22px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 12px 25px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    #myProgress {
+      width: 40%;
+      background-color: rgba(255,255,255,0.3);
+      border-radius: 8px;
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #myBar {
+      width: 1%;
+      height: 18px;
+      background-color: limegreen;
+      border-radius: 8px;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .footer a {
+      color: #00e5ff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="status-message" id="statusText">Preparing GoldHEN Exploit...</div>
+
+  <div id="myProgress">
+    <div id="myBar"></div>
+  </div>
+
+  <div class="footer">
+    This page is provided by <strong>GameStar39</strong> •
+    <a href="https://www.youtube.com/@GameStar_39" target="_blank">My YouTube Channel</a><br>
+    Success: <span id="success">1</span> Failure: <span id="failure">0</span>
+  </div>
+
+  <script>
+    // شريط التقدم الوهمي
+    var elem = document.getElementById("myBar");
+    var statusText = document.getElementById("statusText");
+    var width = 1;
+    var id = setInterval(frame, 25);
+    function frame() {
+      if (width >= 100) {
+        clearInterval(id);
+        document.getElementById("success").innerText = parseInt(document.getElementById("success").innerText) + 1;
+        statusText.textContent = "GoldHEN Injected Successfully! 🎉";
+      } else {
+        width++;
+        elem.style.width = width + '%';
+      }
+    }
+  </script>
+</body>
+</html>
