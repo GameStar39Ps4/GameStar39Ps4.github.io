@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GameStar39 | PS4 Jailbreak 9.00</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-image: url('icon0.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: white;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    @font-face {
+      font-family: 'logging';
+      src: url('fonts/LiberationMono-Regular.ttf');
+    }
+
+    .card {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      width: 90%;
+      max-width: 700px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    #console {
+      font-family: 'logging', monospace;
+      font-size: 18px;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    if (window.applicationCache.status === 0) {
+      window.location.replace("cache.html");
+    }
+  </script>
+
+  <div class="card">
+    <h1>GameStar39 | PS4 Jailbreak 9.00</h1>
+    <pre id="console"></pre>
+  </div>
+
+  <script src="payload.js"></script>
+  <script type="module" src="./alert.mjs"></script>
+
+  <!-- مستطيل الإحصائيات -->
+  <div style="
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 800px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    text-align: center;
+  ">
+    <div style="margin-bottom: 10px;">
+       <strong>نجاحات التعديلة:</strong> <span id="success-count">0</span> &nbsp;&nbsp;
+       <strong>فشل التعديلة:</strong> <span id="fail-count">0</span>
+    </div>
+    <div>
+       تابعني على اليوتيوب: 
+      <a href="https://www.youtube.com/@GameStar39" target="_blank" style="color: deepskyblue; text-decoration: none;">
+        @GameStar39
+      </a>
+    </div>
+  </div>
+
+
+<script>
+  // تحميل القيم من التخزين المحلي
+  window.onload = function () {
+    let success = localStorage.getItem("successCount") || 0;
+    let fail = localStorage.getItem("failCount") || 0;
+    document.getElementById("success-count").innerText = success;
+    document.getElementById("fail-count").innerText = fail;
+  };
+
+  // حفظ عند كل عملية
+  function incrementSuccess() {
+    let el = document.getElementById("success-count");
+    let count = parseInt(el.innerText) + 1;
+    el.innerText = count;
+    localStorage.setItem("successCount", count);
+  }
+
+  function incrementFail() {
+    let el = document.getElementById("fail-count");
+    let count = parseInt(el.innerText) + 1;
+    el.innerText = count;
+    localStorage.setItem("failCount", count);
+  }
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  let successGiven = false;
+
+  const checkInterval = setInterval(() => {
+    const console = document.getElementById("console");
+    if (!console) return;
+    const text = console.innerText.toLowerCase();
+
+    if (text.includes("kernel exploit succeeded!")) {
+      if (!successGiven) {
+        incrementSuccess();
+        successGiven = true;
+        clearInterval(checkInterval);
+      }
+    }
+  }, 1000);
+
+</script>
+
+
+
+<!-- ✅ العنصر الذي يعرض الجملة للمستخدم -->
+<div id="console-placeholder" style="margin-top: 20px; font-size: 20px; color: white;">
+  جاري تفعيل GoldHEN v2.4b18.5 ...
+</div>
+
+<!-- ✅ المربع الأسود مخفي، لكن موجود لقراءة الجمل -->
+<pre id="console" style="display: none;"></pre>
+
+<!-- ✅ سكربت مراقبة الجمل وتحديث الرسالة -->
+<script>
+  let successGiven = false;
+
+  const checkInterval = setInterval(() => {
+    const consoleEl = document.getElementById("console");
+    const placeholder = document.getElementById("console-placeholder");
+    if (!consoleEl || !placeholder) return;
+
+    const text = (consoleEl.innerText || consoleEl.textContent || "").toLowerCase();
+
+    if (text.includes("kernel exploit succeeded!")) {
+      if (!successGiven) {
+        placeholder.innerText = "مبروك عليك GoldHEN v2.4b18.5";
+        successGiven = true;
+        clearInterval(checkInterval);
+      }
+    } else if (text.includes("delete errors") || text.includes("target states")) {
+      if (!successGiven) {
+        placeholder.innerText = "للأسف فشل تفعيل GoldHEN v2.4b18.5، أعد المحاولة.";
+        successGiven = true;
+        clearInterval(checkInterval);
+      }
+    }
+  }, 1000);
+</script>
+
+</body>
+</html>
