@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GameStar39 | PS4 Jailbreak 9.00</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-image: url('icon0.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: white;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    @font-face {
+      font-family: 'logging';
+      src: url('fonts/LiberationMono-Regular.ttf');
+    }
+
+    /* شاشة التحميل */
+    #cache-screen {
+      position: fixed;
+      z-index: 9999;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.92);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      transition: opacity 0.6s;
+    }
+    #cache-screen.hide {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s;
+    }
+    #cache-progress-container {
+      background: rgba(255,255,255,0.3);
+      border-radius: 10px;
+      width: 380px;
+      max-width: 90vw;
+      height: 30px;
+      overflow: hidden;
+      margin: 20px auto 0 auto;
+    }
+    #cache-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: limegreen;
+      transition: width 0.2s ease-in-out;
+    }
+    #cache-progress-text {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 5px;
+      font-family: Arial, sans-serif;
+    }
+
+    /* صفحة index */
+    .card {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      width: 90%;
+      max-width: 700px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    #console {
+      font-family: 'logging', monospace;
+      font-size: 18px;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- شاشة التحميل (cache.html) -->
+  <div id="cache-screen">
+    <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+      <div id="cache-progress-text">Installing GoldHen Offline... 0%</div>
+      <div id="cache-progress-container">
+        <div id="cache-progress-bar"></div>
+      </div>
+    </div>
+    <!-- مستطيل الإحصائيات (مكرر كما في ملف cache.html) -->
+    <div style="
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 800px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 18px;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      text-align: center;
+    ">
+      <div style="margin-bottom: 10px;">
+        <strong>نجاح التعديلة:</strong> <span id="cache-success-count">0</span> &nbsp;&nbsp;
+        <strong>فشل التعديلة:</strong> <span id="cache-fail-count">0</span>
+      </div>
+      <div>
+        الموقع مقدم من طرف قناة:
+        <a href="https://www.youtube.com/@GameStar39" target="_blank" style="color: deepskyblue; text-decoration: none;">
+          @GameStar39
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- صفحة index (مخفية أثناء شاشة التحميل) -->
+  <div id="main-content" style="display:none;width:100%;">
+    <div class="card">
+      <h1>GameStar39 | PS4 Jailbreak 9.00</h1>
+      <div id="statusBox" style="
+        font-family: 'logging', monospace;
+        font-size: 20px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 15px 25px;
+        border-radius: 10px;
+        white-space: pre-wrap;
+        min-height: 50px;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      "></div>
+      <!-- console مخفي للاستخدام الداخلي -->
+      <pre id="console" style="display:none;"></pre>
+    </div>
+    <!-- مستطيل الإحصائيات (كما في index.html) -->
+    <div style="
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 800px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 18px;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      text-align: center;
+    ">
+      <div style="margin-bottom: 10px;">
+        <strong>نجاحات التعديلة:</strong> <span id="success-count">0</span> &nbsp;&nbsp;
+        <strong>فشل التعديلة:</strong> <span id="fail-count">0</span>
+      </div>
+      <div>
+        تابعني على اليوتيوب:
+        <a href="https://www.youtube.com/@GameStar_39" target="_blank" style="color: deepskyblue; text-decoration: none;">
+          @GameStar39
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <script src="payload.js"></script>
+  <script type="module" src="./alert.mjs"></script>
+  
+  <script>
+    // --- وظائف شاشة التحميل (cache screen) ---
+    let percent = 0;
+    let fakeTotal = 1000000; // رقم كبير لمحاكاة التحميل
+    let fakeLoaded = 0;
+    let fakeInterval;
+    let cacheDone = false;
+
+    // تحميل القيم من التخزين المحلي (للإحصائيات)
+    function loadCacheStats() {
+      let success = localStorage.getItem("successCount") || 0;
+      let fail = localStorage.getItem("failCount") || 0;
+      document.getElementById("cache-success-count").innerText = success;
+      document.getElementById("cache-fail-count").innerText = fail;
+    }
+    loadCacheStats();
+
+    // تحديث شريط التحميل
+    function updateCacheProgress(p) {
+      document.getElementById("cache-progress-text").innerHTML = "Installing GoldHen Offline... " + p + "%";
+      document.getElementById("cache-progress-bar").style.width = p + "%";
+    }
+
+    // محاكاة التحميل (لعدم وجود applicationCache فعليًا في معظم المتصفحات)
+    function fakeCacheLoad() {
+      fakeInterval = setInterval(function() {
+        if (percent < 95) {
+          percent += Math.floor(Math.random()*4)+1;
+          if (percent > 95) percent = 95;
+          updateCacheProgress(percent);
+        }
+      }, 60);
+      setTimeout(function() {
+        cacheLoadDone();
+      }, 1800 + Math.random()*1200);
+    }
+
+    function cacheLoadDone() {
+      if (cacheDone) return;
+      cacheDone = true;
+      clearInterval(fakeInterval);
+      updateCacheProgress(100);
+      document.getElementById("cache-progress-text").innerHTML = "GoldHen Cached Successfully";
+      document.getElementById("cache-progress-bar").style.background = "deepskyblue";
+      setTimeout(function(){
+        hideCacheScreen();
+      }, 1200);
+    }
+
+    function hideCacheScreen() {
+      document.getElementById("cache-screen").classList.add("hide");
+      setTimeout(function(){
+        document.getElementById("cache-screen").style.display = "none";
+        document.getElementById("main-content").style.display = "";
+        loadIndexStats();
+      }, 700);
+    }
+
+    // دعم applicationCache (للمتصفحات القديمة)
+    if (window.applicationCache) {
+      window.applicationCache.addEventListener("progress", function(e){
+        let p = Math.round(e.loaded/e.total*100);
+        percent = p;
+        updateCacheProgress(p);
+      }, false);
+      window.applicationCache.oncached = function () { cacheLoadDone(); };
+      window.applicationCache.onupdateready = function () { cacheLoadDone(); };
+      // تحفيز الأحداث (لن تعمل إلا مع manifest حقيقي)
+      // history.replaceState(null,null,'index.html'); // ليس ضروري هنا
+      // var histlength = history.length; history.go(-histlength);
+    } else {
+      fakeCacheLoad(); // متصفح حديث؟ استخدم المحاكاة
+    }
+  </script>
+
+  <script>
+    // ==== وظائف صفحة index (كما هي دون تغيير) ====
+    function loadIndexStats() {
+      let success = localStorage.getItem("successCount") || 0;
+      let fail = localStorage.getItem("failCount") || 0;
+      document.getElementById("success-count").innerText = success;
+      document.getElementById("fail-count").innerText = fail;
+    }
+
+    function incrementSuccess() {
+      let el = document.getElementById("success-count");
+      let count = parseInt(el.innerText) + 1;
+      el.innerText = count;
+      localStorage.setItem("successCount", count);
+      // تحديث شاشة التحميل (لو رجع المستخدم)
+      let el2 = document.getElementById("cache-success-count");
+      if (el2) el2.innerText = count;
+    }
+
+    function incrementFail() {
+      let el = document.getElementById("fail-count");
+      let count = parseInt(el.innerText) + 1;
+      el.innerText = count;
+      localStorage.setItem("failCount", count);
+      let el2 = document.getElementById("cache-fail-count");
+      if (el2) el2.innerText = count;
+    }
+
+    // عند تحميل الصفحة الرئيسية (index)
+    function indexMainInit() {
+      document.getElementById("statusBox").innerText = "جاري تفعيل GoldHEN...";
+      let successGiven = false;
+
+      let failTimer = setTimeout(() => {
+        if (!successGiven) {
+          incrementFail();
+          document.getElementById("statusBox").innerText = "فشل تفعيل GoldHEN v2.4b18.5، أعد المحاولة.";
+          document.getElementById("statusBox").style.color = "red";
+          successGiven = true;
+        }
+      }, 7000);
+
+      const observer = new MutationObserver(() => {
+        let consoleText = document.getElementById("console").innerText.toLowerCase();
+
+        if (!successGiven) {
+          if (consoleText.includes("kernel exploit succeeded!")) {
+            incrementSuccess();
+            successGiven = true;
+            clearTimeout(failTimer);
+            document.getElementById("statusBox").innerText = "مبروك عليك GoldHEN v2.4b18.5";
+            document.getElementById("statusBox").style.color = "lime";
+          } else if (consoleText.includes("dieerror") || consoleText.includes("failed to make aliased pktopts") || consoleText.includes("unhandled rejection")) {
+            incrementFail();
+            successGiven = true;
+            clearTimeout(failTimer);
+            document.getElementById("statusBox").innerText = "فشل تفعيل GoldHEN v2.4b18.5، أعد المحاولة.";
+            document.getElementById("statusBox").style.color = "red";
+          }
+        }
+      });
+      observer.observe(document.getElementById("console"), { childList: true, subtree: true });
+    }
+
+    // تهيئة
+    window.onload = function () {
+      loadCacheStats(); // للإحصائيات في شاشة التحميل
+      // عند إظهار الصفحة الرئيسية، سيتم استدعاء loadIndexStats() تلقائياً
+    }
+    // عند انتهاء شاشة التحميل وإظهار الصفحة الرئيسية
+    document.addEventListener("DOMContentLoaded", function(){
+      // عند إزالة شاشة التحميل، شغّل indexMainInit()
+      let observer = new MutationObserver(() => {
+        if (document.getElementById("main-content").style.display !== "none") {
+          indexMainInit();
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.getElementById("main-content"), { attributes: true, attributeFilter: ['style'] });
+    });
+  </script>
+</body>
+</html>
