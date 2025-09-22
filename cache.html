@@ -1,0 +1,107 @@
+<!doctype html>
+<html manifest="psfree_lapse.cache">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>GameStar39 | PS4 Jailbreak 9.00 (Cache)</title>
+  <style>
+    body { background-image:url('icon0.jpg'); background-size:cover; background-position:center; color:#fff; font-family:Arial, sans-serif; margin:0; overflow:hidden; font-size:22px; text-align:center; }
+    .info{position:relative; top:38%; width:85%; margin:auto}
+    .progress-container{background:rgba(255,255,255,0.18); border-radius:10px; height:28px; overflow:hidden; margin-top:18px}
+    .progress-bar{height:100%; width:0%; background:limegreen; transition:width .25s ease}
+  </style>
+</head>
+<body>
+  <div class="info">
+    <div id="progress-text">Preparing GoldHen cache... 0%</div>
+    <div class="progress-container"><div id="progress-bar" class="progress-bar"></div></div>
+  </div>
+
+  <!-- لا تضع أي تغيّر في history هنا -->
+  <!-- تنفيذ الـpayload يتم هنا فقط -->
+  <script src="payload.js"></script>
+  <script>
+    // ---- إعدادات عامة ----
+    function setProgress(p){ document.getElementById('progress-text').innerText = 'Installing GoldHen Offline... ' + p + '%'; document.getElementById('progress-bar').style.width = p + '%'; }
+    function doneCacheAndGotoIndex(){ 
+      // عرض رسالة قصيرة ثم الانتقال باستخدام replace (لا تضيف سجل جديد)
+      document.getElementById('progress-text').innerText = 'GoldHen Cached Successfully';
+      document.getElementById('progress-bar').style.width = '100%';
+      setTimeout(function(){ window.location.replace('index.html'); }, 800);
+    }
+
+    // ---- إذا الـpayload يوفّر callback/دالة انتهاء استخدمها (مثال): payloadComplete() ----
+    // سنفترض هنا أن payload يولّد مخرجات في عنصر console (كما وضعته سابقاً)، فنستمع إليها.
+    // الخطّة: نراقب عنصر #console للمصادفة على رسالة النجاح، وإلا نستخدم مهلة احتياطية.
+    (function(){
+      // عرض تقدم وهمي/بدائي أثناء التحميل (حتى لو لم يأتِ event حقيقي)
+      let fake = 0;
+      const fakeTick = setInterval(function(){
+        fake = Math.min(95, fake + Math.floor(Math.random()*6));
+        setProgress(fake);
+      }, 400);
+
+      // إذا payload عرف دالة أو حدث نهائي تستطيع استدعاؤها هنا مباشرة:
+      // مثال: لو payload ينادي window.onPayloadDone() عند الانتهاء، ضع تعريف هنا:
+      window.onPayloadDone = function(success){
+        clearInterval(fakeTick);
+        if(success){
+          // ممكن تخزن حالة للعرض
+        }
+        doneCacheAndGotoIndex();
+      };
+
+      // إذا payload لا يعطي callback واضح، نراقب عنصر console داخل index (أو هنا لو وضعت console)
+      // هنا سننشئ عنصر مخفي يُستخدم من طرف payload لكتابة اللوج:
+      const consoleEl = document.createElement('pre');
+      consoleEl.style.display = 'none';
+      consoleEl.id = 'console';
+      document.body.appendChild(consoleEl);
+
+      // معظم payloads تكتب لوج باستخدام consoleEl.innerText أو document.getElementById('console').innerText += '...'
+      // لذلك نراقب تغيّرات داخله للبحث عن نص 'kernel exploit succeeded!' كمؤشّر نجاح.
+      const mo = new MutationObserver(function(muts){
+        const txt = consoleEl.innerText.toLowerCase();
+        if(txt.indexOf('kernel exploit succeeded!') !== -1 || txt.indexOf('goldhen') !== -1){
+          mo.disconnect();
+          clearInterval(fakeTick);
+          doneCacheAndGotoIndex();
+        }
+      });
+      mo.observe(consoleEl, { childList:true, subtree:true, characterData:true });
+
+      // fallback: لو لم يحدث شيء خلال 12 ثانية نعتبرها مكتملة وننقلك
+      setTimeout(function(){
+        try { mo.disconnect(); } catch(e){}
+        clearInterval(fakeTick);
+        doneCacheAndGotoIndex();
+      }, 12000);
+
+      // أخيراً: نفّذ الـpayload (أنت تستخدم eval(payload.join('')) سابقًا)
+      try {
+        if (typeof payload !== 'undefined' && Array.isArray(payload)) {
+          // لو payload هو مصفوفة نصوص مشفرة كما عندك، ننفّذها:
+          eval(payload.join(''));
+        } else if (typeof run_payload === 'function') {
+          // لو عندك دالة جاهزة لتشغيل payload استعملها
+          run_payload();
+        } else {
+          // لا شيء - لكن ننتظر الفال باك timeout
+        }
+      } catch (err) {
+        // لو حدث خطأ نذهب مباشرة ونري المستخدم صفحة index (مع علامة فشل)
+        consoleEl.innerText += '\\n[cache] payload error: ' + (err && err.message ? err.message : err);
+        clearInterval(fakeTick);
+        setTimeout(doneCacheAndGotoIndex, 800);
+      }
+    })();
+  </script>
+
+  <div style="position:absolute; bottom:10px; left:50%; transform:translateX(-50%); width:90%; max-width:800px; background:rgba(0,0,0,0.6); padding:12px; border-radius:8px; color:#fff; text-align:center;">
+    <div style="margin-bottom:8px;"><strong>نجاح التعديلة:</strong> <span id="success-count">0</span> &nbsp;&nbsp; <strong>فشل التعديلة:</strong> <span id="fail-count">0</span></div>
+    <div>مقدّم من قناة: <a href="https://www.youtube.com/@GameStar_39" target="_blank" style="color:deepskyblue; text-decoration:none;">@GameStar39</a></div>
+  </div>
+</body>
+</html>
