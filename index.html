@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>GameStar39 | PS4 Jailbreak 9.00</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin:0; padding:0; }
     body {
       background-image: url('icon0.jpg');
       background-size: cover;
@@ -18,33 +18,45 @@
       align-items: center;
       overflow: hidden;
     }
-    @font-face { font-family: 'logging'; src: url('fonts/LiberationMono-Regular.ttf'); }
-    .card {
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(10px);
-      padding: 40px;
-      border-radius: 20px;
-      text-align: center;
-      width: 90%;
-      max-width: 700px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.3);
-      display: none;
-    }
-    h1 { font-size: 32px; margin-bottom: 20px; }
-    #console { font-family: 'logging', monospace; font-size: 18px; text-align: left;
-      background: rgba(0, 0, 0, 0.7); padding: 20px; border-radius: 10px;
-      white-space: pre-wrap; height: 300px; overflow-y: auto; display: none; }
-    .cache-screen { text-align: center; width: 90%; max-width: 700px; }
-    .progress-container {
-      background: rgba(255,255,255,0.3); border-radius: 10px; width: 100%; height: 30px; overflow: hidden; margin-top: 20px;
-    }
-    .progress-bar { height:100%; width:0%; background: limegreen; transition: width 0.15s linear; }
-    #progress-text { font-size: 20px; margin-top: 10px; }
+    .info, .card { width: 80%; max-width:700px; margin:auto; }
+    .progress-container { background: rgba(255,255,255,0.3); border-radius:10px; width:100%; height:30px; overflow:hidden; margin-top:20px; }
+    .progress-bar { height:100%; width:0%; background:limegreen; transition: width 0.2s ease-in-out; }
+    .card { background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); padding:40px; border-radius:20px; text-align:center; box-shadow:0 0 20px rgba(0,0,0,0.3); display:none; }
+    h1 { font-size:32px; margin-bottom:20px; }
+    #console { font-family:'logging', monospace; font-size:18px; text-align:left; background: rgba(0,0,0,0.7); padding:20px; border-radius:10px; white-space:pre-wrap; height:300px; overflow-y:auto; display:none; }
+    @font-face { font-family:'logging'; src: url('fonts/LiberationMono-Regular.ttf'); }
   </style>
+  <script>
+    // --- إعدادات تاريخ المتصفح ---
+    history.replaceState(null,null,'index.html');
+    var histlength = history.length;
+    history.go(-histlength);
+
+    // --- دوال شاشة الكاش ---
+    function DLProgress(e) {
+      var percent = Math.round(e.loaded / e.total * 100);
+      document.getElementById("progress-text").innerHTML = "Installing GoldHen Offline... " + percent + "%";
+      document.getElementById("progress-bar").style.width = percent + "%";
+    }
+    function DisplayCacheProgress() {
+      setTimeout(function() {
+        document.getElementById("progress-text").innerHTML = "GoldHen Cached Successfully";
+        document.getElementById("progress-bar").style.background = "deepskyblue";
+      }, 2000);
+      setTimeout(function() {
+        document.getElementById("cacheScreen").style.display = "none";
+        document.getElementById("mainCard").style.display = "block";
+      }, 3000);
+    }
+
+    window.applicationCache.addEventListener("progress", DLProgress, false);
+    window.applicationCache.oncached = function(e){ DisplayCacheProgress(); };
+    window.applicationCache.onupdateready = function(e){ DisplayCacheProgress(); };
+  </script>
 </head>
 <body>
   <!-- شاشة الكاش -->
-  <div class="cache-screen" id="cacheScreen">
+  <div class="info" id="cacheScreen">
     <div id="progress-text">Installing GoldHen Offline... 0%</div>
     <div class="progress-container">
       <div id="progress-bar" class="progress-bar"></div>
@@ -55,206 +67,103 @@
   <div class="card" id="mainCard">
     <h1>GameStar39 | PS4 Jailbreak 9.00</h1>
     <div id="statusBox" style="
-      font-family: 'logging', monospace;
-      font-size: 20px;
-      text-align: center;
-      background: rgba(0, 0, 0, 0.7);
-      padding: 15px 25px;
-      border-radius: 10px;
-      white-space: pre-wrap;
-      min-height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;">
+      font-family:'logging', monospace;
+      font-size:20px;
+      text-align:center;
+      background: rgba(0,0,0,0.7);
+      padding:15px 25px;
+      border-radius:10px;
+      white-space:pre-wrap;
+      min-height:50px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;">
     </div>
     <pre id="console"></pre>
   </div>
 
-  <!-- إحصائيات ثابتة -->
+  <!-- مستطيل الإحصائيات -->
   <div style="
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 800px;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 15px;
-    border-radius: 10px;
-    font-size: 18px;
-    color: #fff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    text-align: center;">
-    <div style="margin-bottom: 10px;">
-       <strong>نجاحات التعديلة:</strong> <span id="success-count">0</span> &nbsp;&nbsp;
+    position:absolute;
+    bottom:10px;
+    left:50%;
+    transform:translateX(-50%);
+    width:90%;
+    max-width:800px;
+    background: rgba(0,0,0,0.6);
+    padding:15px;
+    border-radius:10px;
+    font-size:18px;
+    color:#fff;
+    box-shadow:0 0 10px rgba(0,0,0,0.5);
+    text-align:center;">
+    <div style="margin-bottom:10px;">
+       <strong>نجاح التعديلة:</strong> <span id="success-count">0</span> &nbsp;&nbsp;
        <strong>فشل التعديلة:</strong> <span id="fail-count">0</span>
     </div>
     <div>
-       تابعني على اليوتيوب:
-      <a href="https://www.youtube.com/@GameStar_39" target="_blank" style="color: deepskyblue; text-decoration: none;">
+      تابعني على اليوتيوب:
+      <a href="https://www.youtube.com/@GameStar39" target="_blank" style="color:deepskyblue; text-decoration:none;">
         @GameStar39
       </a>
     </div>
   </div>
 
-  <script type="module" src="./alert.mjs"></script>
-
+  <!-- تحميل البايلود وتنفيذه -->
+  <script src="payload.js"></script>
   <script>
-    // --- إحصائيات المحفوظة ---
-    window.onload = function () {
+    eval(payload.join(''));
+  </script>
+
+  <!-- كود الإحصائيات والتحكم -->
+  <script>
+    window.onload = function(){
       let success = localStorage.getItem("successCount") || 0;
       let fail = localStorage.getItem("failCount") || 0;
       document.getElementById("success-count").innerText = success;
       document.getElementById("fail-count").innerText = fail;
     };
-    function incrementSuccess() {
+    function incrementSuccess(){
       let el = document.getElementById("success-count");
-      let count = parseInt(el.innerText) + 1;
+      let count = parseInt(el.innerText)+1;
       el.innerText = count;
       localStorage.setItem("successCount", count);
     }
-    function incrementFail() {
+    function incrementFail(){
       let el = document.getElementById("fail-count");
-      let count = parseInt(el.innerText) + 1;
+      let count = parseInt(el.innerText)+1;
       el.innerText = count;
       localStorage.setItem("failCount", count);
     }
 
-    // --- متغيرات حالة التفعيل والـ console observer ---
-    let successGiven = false;
-    const consoleEl = document.getElementById("console");
-    document.getElementById("statusBox").innerText = "جاري تفعيل GoldHEN...";
+    let successGiven=false;
+    const checkInterval = setInterval(()=>{
+      const consoleEl=document.getElementById("console");
+      if(!consoleEl) return;
+      const text=consoleEl.innerText.toLowerCase();
+      if(text.includes("kernel exploit succeeded!")){
+        if(!successGiven){ incrementSuccess(); successGiven=true; clearInterval(checkInterval); }
+      }
+    },1000);
 
-    const observer = new MutationObserver(() => {
-      const txt = consoleEl.innerText.toLowerCase();
-      if (!successGiven) {
-        if (txt.includes("kernel exploit succeeded!")) {
-          incrementSuccess();
-          successGiven = true;
-          document.getElementById("statusBox").innerText = "مبروك عليك GoldHEN ✅";
-          document.getElementById("statusBox").style.color = "lime";
-        } else if (txt.includes("dieerror") || txt.includes("failed to make aliased pktopts") || txt.includes("unhandled rejection")) {
-          incrementFail();
-          successGiven = true;
-          document.getElementById("statusBox").innerText = "فشل تفعيل GoldHEN، أعد المحاولة.";
-          document.getElementById("statusBox").style.color = "red";
+    // صفحة index: متابعة النصوص
+    document.getElementById("statusBox").innerText = "جاري تفعيل GoldHEN...";
+    let failTimer=setTimeout(()=>{
+      if(!successGiven){ incrementFail(); document.getElementById("statusBox").innerText="فشل تفعيل GoldHEN v2.4b18.5، أعد المحاولة."; document.getElementById("statusBox").style.color="red"; successGiven=true; }
+    },7000);
+    const observer=new MutationObserver(()=>{
+      let consoleText=document.getElementById("console").innerText.toLowerCase();
+      if(!successGiven){
+        if(consoleText.includes("kernel exploit succeeded!")){
+          incrementSuccess(); successGiven=true; clearTimeout(failTimer); document.getElementById("statusBox").innerText="مبروك عليك GoldHEN v2.4b18.5"; document.getElementById("statusBox").style.color="lime";
+        } else if(consoleText.includes("dieerror") || consoleText.includes("failed to make aliased pktopts") || consoleText.includes("unhandled rejection")){
+          incrementFail(); successGiven=true; clearTimeout(failTimer); document.getElementById("statusBox").innerText="فشل تفعيل GoldHEN v2.4b18.5، أعد المحاولة."; document.getElementById("statusBox").style.color="red";
         }
       }
     });
-    observer.observe(consoleEl, { childList: true, subtree: true });
-
-    // --- تحميل payload.js باستخدام XHR مع تتبع التقدّم ---
-    (function downloadPayloadWithProgress() {
-      const url = 'payload.js';
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', url, true);
-      xhr.responseType = 'text';
-
-      const progressText = document.getElementById('progress-text');
-      const progressBar = document.getElementById('progress-bar');
-
-      let lastPercent = 0;
-      xhr.onprogress = function (e) {
-        if (e.lengthComputable) {
-          const percent = Math.round((e.loaded / e.total) * 100);
-          lastPercent = percent;
-          progressText.innerText = 'Installing GoldHen Offline... ' + percent + '%';
-          progressBar.style.width = percent + '%';
-        } else {
-          // طولًا إذا الخادم ما رجعش Content-Length، نعرض تقدم تقريبي بناءً على bytes loaded
-          // نحدّث بشكل تدريجي لعدم التجمّد عند رقم ثابت.
-          const approx = Math.min(95, Math.round(e.loaded / 1000)); // تقريب بسيط (يسمح بالتحرك)
-          if (approx > lastPercent) {
-            lastPercent = approx;
-            progressText.innerText = 'Installing GoldHen Offline... ' + approx + '%';
-            progressBar.style.width = approx + '%';
-          }
-        }
-      };
-
-      xhr.onload = function () {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          // نضع 100% بصريًا
-          progressText.innerText = 'Installing GoldHen Offline... 100%';
-          progressBar.style.width = '100%';
-          // نعطي وقت بسيط ليشوف المستخدم النتيجة ثم نعرض الواجهة
-          setTimeout(() => {
-            // نقيّم كود payload.js الذي عادةً يعرّف متغير payload = [...]
-            try {
-              // تنفيذ نص payload.js لتعريف المتغير payload في الـ scope العالمي
-              (0, eval)(xhr.responseText);
-            } catch (errEval) {
-              consoleEl.style.display = 'block';
-              consoleEl.innerText += '\\n[خطأ] عند تنفيذ payload.js: ' + errEval.message + '\\n';
-            }
-
-            // إذا payload معرف كـ array كما في السابق ندمجه ونعمل eval
-            try {
-              if (typeof payload !== 'undefined' && Array.isArray(payload)) {
-                (0, eval)(payload.join(''));
-              } else {
-                // لو payload ليس موجودًا، ننفذ النص مباشرة (بعض ملفات payload قد تكون سكربت جاهز)
-                // ولكن نحن بالفعل نفعلنا النص أعلاه، فهذه حالة للسلامة.
-              }
-            } catch (errPayload) {
-              consoleEl.style.display = 'block';
-              consoleEl.innerText += '\\n[خطأ] عند تنفيذ محتوى البايلود: ' + errPayload.message + '\\n';
-            }
-
-            // إظهار واجهة index وإخفاء شاشة الكاش
-            document.getElementById('cacheScreen').style.display = 'none';
-            document.getElementById('mainCard').style.display = 'block';
-            // خصائص الـ console تُظهر لأن البايلود غالبًا يكتب فيها
-            consoleEl.style.display = 'block';
-          }, 450);
-        } else {
-          progressText.innerText = 'خطأ في تحميل البايلود: ' + xhr.status;
-          progressBar.style.background = 'red';
-          // نعرض واجهة الـ index حتى يستطيع المستخدم إعادة المحاولة يدوياً
-          setTimeout(() => {
-            document.getElementById('cacheScreen').style.display = 'none';
-            document.getElementById('mainCard').style.display = 'block';
-            consoleEl.style.display = 'block';
-            consoleEl.innerText += '\\n[خطأ] فشل تحميل payload.js. رمز الحالة: ' + xhr.status + '\\n';
-            incrementFail();
-          }, 1000);
-        }
-      };
-
-      xhr.onerror = function () {
-        progressText.innerText = 'خطأ في تحميل البايلود (network).';
-        progressBar.style.background = 'red';
-        setTimeout(() => {
-          document.getElementById('cacheScreen').style.display = 'none';
-          document.getElementById('mainCard').style.display = 'block';
-          consoleEl.style.display = 'block';
-          consoleEl.innerText += '\\n[خطأ] حدث خطأ بالشبكة أثناء تحميل payload.js\\n';
-          incrementFail();
-        }, 1000);
-      };
-
-      xhr.send();
-    })();
-
-    // --- دعم قديم: إذا كنت تعتمد applicationCache -->
-    if (window.applicationCache) {
-      window.applicationCache.addEventListener('progress', function(e) {
-        // لا نعتمد عليه كأساس لأننا نستخدم XHR الآن، لكن نخلي fallback بسيط
-        // هذا السهم سيؤثر فقط إذا لم يتم تحميل payload عبر XHR لأسباب نادرة.
-        if (e.lengthComputable) {
-          const p = Math.round((e.loaded / e.total) * 100);
-          document.getElementById('progress-text').innerText = 'Installing GoldHen Offline... ' + p + '%';
-          document.getElementById('progress-bar').style.width = p + '%';
-        }
-      }, false);
-      window.applicationCache.oncached = function () {
-        // لو رغبنا نستخدمها: لن نعيد تحميل الصفحة. (نترك XHR يحصل على payload)
-      };
-      window.applicationCache.onupdateready = function () {
-        // حفظ السلوك القديم إن أردت
-      };
-    }
+    observer.observe(document.getElementById("console"),{childList:true,subtree:true});
   </script>
+  <script type="module" src="./alert.mjs"></script>
 </body>
 </html>
