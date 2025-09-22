@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GameStar39 | PS4 Jailbreak 9.00</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-image: url('icon0.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: white;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    @font-face {
+      font-family: 'logging';
+      src: url('fonts/LiberationMono-Regular.ttf');
+    }
+
+    .card {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      width: 90%;
+      max-width: 700px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    #console {
+      font-family: 'logging', monospace;
+      font-size: 18px;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    if (window.applicationCache.status === 0) {
+      window.location.replace("cache.html");
+    }
+  </script>
+
+  <div class="card">
+    <h1>GameStar39 | PS4 Jailbreak 9.00</h1>
+    
+<div id="statusBox" style="
+    font-family: 'logging', monospace;
+    font-size: 20px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px 25px;
+    border-radius: 10px;
+    white-space: pre-wrap;
+    min-height: 50px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+">
+</div>
+
+<!-- console مخفي للاستخدام الداخلي -->
+<pre id="console" style="display:none;"></pre>
+
+  </div>
+
+  <script src="payload.js"></script>
+  <script type="module" src="./alert.mjs"></script>
+
+  <!-- مستطيل الإحصائيات -->
+  <div style="
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 800px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    text-align: center;
+  ">
+    <div style="margin-bottom: 10px;">
+       <strong>نجاحات التعديلة:</strong> <span id="success-count">0</span> &nbsp;&nbsp;
+       <strong>فشل التعديلة:</strong> <span id="fail-count">0</span>
+    </div>
+    <div>
+       تابعني على اليوتيوب: 
+      <a href="https://www.youtube.com/@GameStar_39" target="_blank" style="color: deepskyblue; text-decoration: none;">
+        @GameStar39
+      </a>
+    </div>
+  </div>
+
+
+<script>
+  // تحميل القيم من التخزين المحلي
+  window.onload = function () {
+    let success = localStorage.getItem("successCount") || 0;
+    let fail = localStorage.getItem("failCount") || 0;
+    document.getElementById("success-count").innerText = success;
+    document.getElementById("fail-count").innerText = fail;
+  };
+
+  // حفظ عند كل عملية
+  function incrementSuccess() {
+    let el = document.getElementById("success-count");
+    let count = parseInt(el.innerText) + 1;
+    el.innerText = count;
+    localStorage.setItem("successCount", count);
+  }
+
+  function incrementFail() {
+    let el = document.getElementById("fail-count");
+    let count = parseInt(el.innerText) + 1;
+    el.innerText = count;
+    localStorage.setItem("failCount", count);
+  }
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  let successGiven = false;
+
+// عند تحميل الصفحة نضع النص الأول
+document.getElementById("statusBox").innerText = "جاري تفعيل GoldHEN...";
+
+let failTimer = setTimeout(() => {
+    if (!successGiven) {
+        incrementFail();
+        document.getElementById("statusBox").innerText = "فشل تفعيل GoldHEN v2.4b18.5، أعد المحاولة.";
+        document.getElementById("statusBox").style.color = "red";
+        successGiven = true;
+    }
+}, 7000);
+
+const observer = new MutationObserver(() => {
+    let consoleText = document.getElementById("console").innerText.toLowerCase();
+
+    if (!successGiven) {
+        if (consoleText.includes("kernel exploit succeeded!")) {
+            incrementSuccess();
+            successGiven = true;
+            clearTimeout(failTimer);
+            document.getElementById("statusBox").innerText = "مبروك عليك GoldHEN v2.4b18.5";
+            document.getElementById("statusBox").style.color = "lime";
+        } else if (consoleText.includes("dieerror") || consoleText.includes("failed to make aliased pktopts") || consoleText.includes("unhandled rejection")) {
+            incrementFail();
+            successGiven = true;
+            clearTimeout(failTimer);
+            document.getElementById("statusBox").innerText = "فشل تفعيل GoldHEN v2.4b18.5، أعد المحاولة.";
+            document.getElementById("statusBox").style.color = "red";
+        }
+    }
+});
+observer.observe(document.getElementById("console"), { childList: true, subtree: true });
+</script>
+
+
+</body>
+</html>
